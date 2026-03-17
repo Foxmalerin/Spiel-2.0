@@ -1,0 +1,39 @@
+body {
+    background: #ff0033; /* Start mit Rot */
+    animation: ledtransition 15s linear infinite;
+}
+
+/* Farbwechsel als Loop */
+@keyframes ledtransition {
+    20%   { background: #ff0033; }
+    40%  { background: #ffd600; }
+    60%  { background: #00d6e8; }
+    80%  { background: #004bff; }
+    100%  { background: #ff0033; } /* zurück zu Rot */
+}
+
+/* Danach wie vorher – der Gradient bewegt sich endlos */
+@keyframes ledmove {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 0%; }
+}
+#spielfeld {
+    border: 4px solid #000000;   /* Rahmen */
+    margin-top: 30px;  /* Abstand */
+    margin-left: 40px;
+    background-color: #0c7106; /* Hintergrundfarbe */
+}
+#score {
+    border: 4px solid #000000;   /* Rahmen */
+    margin-top: 15px;  /* Abstand */
+    margin-left: 50px;
+    background-color: #00d6e8;/* Hintergrundfarbe */
+
+}
+.canvas-wrapper { /* um die canvas übereinander zu legen*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; /* optional, etwas Abstand oben */
+}
+
