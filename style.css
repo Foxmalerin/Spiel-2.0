@@ -19,7 +19,7 @@ body {
 }
 #spielfeld {
     border: 4px solid #000000;   /* Rahmen */
-    margin-top: 30px;  /* Abstand */
+    margin-top: 25px;  /* Abstand */
     margin-left: 40px;
     background-color: #0c7106; /* Hintergrundfarbe */
 }
@@ -35,5 +35,10 @@ body {
     flex-direction: column;
     align-items: center;
     margin-top: 20px; /* optional, etwas Abstand oben */
+}
+canvas {
+    max-width: 90vw;
+    display: block;
+    height: auto;
 }
 

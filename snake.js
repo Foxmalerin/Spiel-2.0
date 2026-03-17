@@ -5,6 +5,19 @@ const scoreCanvas = document.getElementById("score");
 const scoreCtx = scoreCanvas.getContext("2d");
 const canvas = document.getElementById("spielfeld")
 const ctx = canvas.getContext("2d")
+//Für handy spiel bar
+function resizeCanvas() {
+    // quadratisches Spielfeld, maximal 90% der kleineren Bildschirm-Seite
+    const size = Math.min(window.innerWidth, window.innerHeight) * 0.9;
+    canvas.width = size;
+    canvas.height = size;
+    scoreCanvas.width = size;
+    scoreCanvas.height = 60; // Score-Feld bleibt kleiner
+}
+
+// Beim Laden und bei Größenänderungen anpassen
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
 //Apfel Bild
 const apfelIcon = new Image();
@@ -34,11 +47,16 @@ const gridSize = 20;     // Größe eines Feldes (Pixel)
 const gridCount = 20;    // Anzahl Felder pro Reihe/Spalte
 
 //Variablen festlegen
+let touchStartX = 0, touchStartY = 0;
+let touchEndX = 0, touchEndY = 0;
 let direction = "right" // start richtung von der schlange
 let gameOver = false; //GameOver
 let snake = [{ x: 20, y: 20 }];// Die Schlange wird als Array gespeichert, Kopf immer zuerst
 let score = 0; // score
 // zufählige koordinaten für das essen
+//Variablen festlegen
+let appleX, appleY;
+let bananaX, bananaY;
 generateApple();
 generateBanane()
 
@@ -69,45 +87,51 @@ document.addEventListener("keydown", function(event) {
         direction = "up";
     }
 })
-//Variablen festlegen
-let appleX, appleY;
-let bananaX, bananaY;
+//Touch richtungen
+canvas.addEventListener('touchstart', function(event) {
+    // Nur einen Finger beachten
+    if(event.touches.length === 1){
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+    }
+});
+
+canvas.addEventListener('touchend', function(event) {
+    touchEndX = event.changedTouches[0].clientX;
+    touchEndY = event.changedTouches[0].clientY;
+    handleSwipe();
+});
+
+// Prüfe, ob Feld frei ist (weder Schlange noch andere Frucht)
+function isFree(x, y, excludePositions = []) {
+    // Prüfen, ob auf der Schlange
+    for (let part of snake) {
+        if (part.x === x && part.y === y) return false;
+    }
+    // Prüfen, ob Position ausgeschlossen (z.B. Apfel beim Bananen-Spawn)
+    for (let pos of excludePositions) {
+        if (pos.x === x && pos.y === y) return false;
+    }
+    return true;
+}
  //Den apfel generieren
 function generateApple() {
-    let valid = false;
     let x, y;
-    while (!valid) {
+    do {
         x = Math.floor(Math.random() * gridCount) * gridSize;
         y = Math.floor(Math.random() * gridCount) * gridSize;
-        valid = true;
-        //Keine überschneidung mit der Schlange
-        for (let i = 0; i < snake.length; i++) {
-            if (snake[i].x === x && snake[i].y === y) {
-                valid = false;
-                break;
-            }
-        }
-    }
+    } while (!isFree(x, y, [{ x: bananaX, y: bananaY }]));
     appleX = x;
     appleY = y;
 }
+
 // Die Banane generieren
 function generateBanane() {
-    let valid = false;
     let x, y;
-    while (!valid) {
+    do {
         x = Math.floor(Math.random() * gridCount) * gridSize;
         y = Math.floor(Math.random() * gridCount) * gridSize;
-        valid = true;
-        //Keine überschneidung mit dem Apfel
-        for (let i = 0; i < snake.length; i++) {
-            if (snake[i].x === x && snake[i].y === y) {
-                valid = false;
-                break;
-            }
-        }
-        if (x === appleX && y === appleY) valid = false;
-    }
+    } while (!isFree(x, y, [{ x: appleX, y: appleY }]));
     bananaX = x;
     bananaY = y;
 }
@@ -126,11 +150,10 @@ function generateBanane() {
             score++ //score soll eins höher gehen
             updateScore();
             generateApple(); // Apfel neu generieren, aber nie auf Snake
-            generateBanane(); // Banane neu generieren, aber nie auf dem apfel
         } else if (newHead.x === bananaX && newHead.y === bananaY) { // wenn die schlange die banane frisst
             score ++ //score soll eins höher gehen
             updateScore();
-            generateBanane();
+            generateBanane(); // Banane neu generieren, aber nie auf dem apfel
         } else {
             // sonst: letztes Teil entfernen (Länge bleibt gleich)
             snake.pop();
@@ -158,7 +181,24 @@ function getSegmentDirection(prev, curr) {
     if (curr.y < prev.y) return "up";
     return "right";
 }
+//Touch Richtung erkennen
+function handleSwipe() {
+    const dx = touchEndX - touchStartX;
+    const dy = touchEndY - touchStartY;
 
+    // Schwellenwert, damit kleine Wischbewegungen ignoriert werden:
+    const threshold = 30; // Pixel
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+        // Horizontaler Swipe
+        if (dx > threshold && direction !== "left") direction = "right";
+        else if (dx < -threshold && direction !== "right") direction = "left";
+    } else {
+        // Vertikaler Swipe
+        if (dy > threshold && direction !== "up") direction = "down";
+        else if (dy < -threshold && direction !== "down") direction = "up";
+    }
+}
 // Beim neustart vom game das alles wieder reset
 function resetGame() {
     snake = [{ x: 20, y: 20 }];
@@ -179,11 +219,19 @@ function resetGame() {
             clearInterval(timer);
             gameOver = true;
             scoreCtx.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
+
+            let centerX = scoreCanvas.width / 2;
+            let centerY = scoreCanvas.height / 2;
+
+            scoreCtx.textAlign = "center";
+            scoreCtx.textBaseline = "middle";
+
             scoreCtx.font = "20px Arial";
             scoreCtx.fillStyle = "blue";
-            scoreCtx.fillText("Gewonnen! :)", 45, 30);
-            scoreCtx.font = "13px Arial";
-            scoreCtx.fillText("Drücke Enter um neu zu starten!", 5, 50);
+            scoreCtx.fillText("Gewonnen! :)", centerX, centerY - 10);
+
+            scoreCtx.font = "15px Arial";
+            scoreCtx.fillText("Drücke Enter um neu zu starten!", centerX, centerY + 18);
             return;
         }
 
@@ -197,11 +245,18 @@ function resetGame() {
             gameOver = true;
             // Optional: Game Over im Score-Canvas anzeigen
             scoreCtx.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
+
+            let centerX = scoreCanvas.width / 2;
+            let centerY = scoreCanvas.height / 2;
+
+            scoreCtx.textAlign = "center";
+            scoreCtx.textBaseline = "middle";
+
             scoreCtx.font = "24px Arial";
             scoreCtx.fillStyle = "red";
-            scoreCtx.font = "13px Arial";
-            scoreCtx.fillText("Game Over!", 65, 20);
-            scoreCtx.fillText("Drücke Enter um neu zu starten!", 5, 40);
+            scoreCtx.font = "15px Arial";
+            scoreCtx.fillText("Game Over!", centerX, centerY - 10);
+            scoreCtx.fillText("Drücke Enter um neu zu starten!", centerX, centerY + 18);
             return; // Funktion abbrechen, damit nichts mehr gezeichnet wird
 
         }
@@ -212,11 +267,18 @@ function resetGame() {
                 clearInterval(timer);
                 gameOver = true;
                 scoreCtx.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
+
+                let centerX = scoreCanvas.width / 2;
+                let centerY = scoreCanvas.height / 2;
+
+                scoreCtx.textAlign = "center";
+                scoreCtx.textBaseline = "middle";
+
                 scoreCtx.font = "24px Arial";
                 scoreCtx.fillStyle = "red";
-                scoreCtx.font = "13px Arial";
-                scoreCtx.fillText("Game Over!", 65, 20);
-                scoreCtx.fillText("Drücke Enter um neu zu starten!", 5, 40);
+                scoreCtx.font = "15px Arial";
+                scoreCtx.fillText("Game Over!", centerX, centerY - 10);
+                scoreCtx.fillText("Drücke Enter um neu zu starten!", centerX, centerY + 18);
                 return;
             }
         }
