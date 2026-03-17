@@ -40,7 +40,7 @@ let snake = [{ x: 20, y: 20 }];// Die Schlange wird als Array gespeichert, Kopf 
 let score = 0; // score
 // zufählige koordinaten für das essen
 generateApple();
-generateBanane()
+generateBanane2()
 
 // Score-Funktion (zeichnet den Score im blauen Kasten)
 function updateScore() {
@@ -92,7 +92,7 @@ function generateApple() {
     appleY = y;
 }
 // Die Banane generieren
-function generateBanane() {
+function generateBanane2() {
     let valid = false;
     let x, y;
     while (!valid) {
@@ -126,11 +126,11 @@ function generateBanane() {
             score++ //score soll eins höher gehen
             updateScore();
             generateApple(); // Apfel neu generieren, aber nie auf Snake
-            generateBanane(); // Banane neu generieren, aber nie auf dem apfel
+            generateBanane2(); // Banane neu generieren, aber nie auf dem apfel
         } else if (newHead.x === bananaX && newHead.y === bananaY) { // wenn die schlange die banane frisst
             score ++ //score soll eins höher gehen
             updateScore();
-            generateBanane();
+            generateBanane2();
         } else {
             // sonst: letztes Teil entfernen (Länge bleibt gleich)
             snake.pop();
@@ -166,7 +166,7 @@ function resetGame() {
     score = 0;
     updateScore();
     generateApple();
-    generateBanane();
+    generateBanane2();
     gameOver = false;
     timer = setInterval(gameLoop, 200);
 }
