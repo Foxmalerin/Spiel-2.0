@@ -913,7 +913,7 @@ function generatePizza() {
                 timer = setInterval(gameLoop, originalSpeed); // Zurück auf original
                 speedUpTimer = null;
             }, 5000); // 5 Sekunden schneller
-
+            snake.pop(); // <-- Damit wächst die Schlange nicht!
         } else if (newHead.x === PancakesX && newHead.y === PancakesY) { // wenn die schlange die Pancakes frisst
             score ++ //score soll eins höher gehen
             updateScore();
