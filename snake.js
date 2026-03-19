@@ -6,16 +6,12 @@ const ctx = canvas.getContext("2d")
 
 //Für handy spielbar
 function resizeCanvas() {
-    // quadratisches Spielfeld, maximal 90% der kleineren Bildschirm-Seite
-    const size = Math.min(window.innerWidth, window.innerHeight) * 0.9;
-    canvas.width = size;
-    canvas.height = size;
-    scoreCanvas.width = size;
+    canvas.height = 800;
+    canvas.width = 800;
+    scoreCanvas.width = 600;
     scoreCanvas.height = 60; // Score-Feld bleibt kleiner
     initSnake();
 }
-
-window.addEventListener('resize', resizeCanvas);
 
 //Apfel Bild
 const apfelIcon = new Image();
@@ -122,10 +118,10 @@ let touchStartX = 0, touchStartY = 0;
 let touchEndX = 0, touchEndY = 0;
 let direction = "right" // start richtung von der schlange
 let gameOver = false; //GameOver
-let snake = [];// Die Schlange wird als Array gespeichert, Kopf immer zuerst
+let snake = [{ x: 0, y: 20 }];
 let score = 0; // score
-// zufählige koordinaten für das essen
-//Variablen festlegen
+
+//Variablen festlegen ( Koordinaten )
 let appleX, appleY;
 let bananaX, bananaY;
 let meloneX, meloneY;
@@ -210,10 +206,8 @@ function isFree(x, y, excludePositions = []) {
 }
 
 function initSnake() {
-    // Schlange startet in der Mitte des Spielfelds
-    snake = [
-        { x: Math.floor(gridCount / 2) * gridSize, y: Math.floor(gridCount / 2) * gridSize }
-    ];
+    // Schlange startet oben links im Spielfeld (x=0, y=0)
+    snake = [{ x: 0, y: 20 }];
 }
 
  //Den apfel generieren
@@ -570,17 +564,17 @@ function generatesuesses() {
             updateScore();
             generateZitrone(); // Zitrone neu generieren
 
-        } else if (newHead.x === ZitroneX && newHead.y === ZitroneY) { // wenn die schlange den Donut frisst
+        } else if (newHead.x === DonutX && newHead.y === DonutY) { // wenn die schlange den Donut frisst
             score ++ //score soll eins höher gehen
             updateScore();
             generateDonut(); // Donut neu generieren
 
-        } else if (newHead.x === ZitroneX && newHead.y === ZitroneY) { // wenn die schlange den Keks frisst
+        } else if (newHead.x === KeksX && newHead.y === KeksY) { // wenn die schlange den Keks frisst
             score ++ //score soll eins höher gehen
             updateScore();
             generateKeks(); // Keks neu generieren
 
-        } else if (newHead.x === ZitroneX && newHead.y === ZitroneY) { // wenn die schlange das suesse frisst
+        } else if (newHead.x === suessesX && newHead.y === suessesY) { // wenn die schlange das suesse frisst
             score ++ //score soll eins höher gehen
             updateScore();
             generatesuesses(); // suesses neu generieren
@@ -812,7 +806,7 @@ function resetGame() {
 
         //Den Keks Zeichnen
         if (KeksIconGeladen) {
-            ctx.drawImage(KirschenIcon, KeksX, KeksY, gridSize, gridSize);
+            ctx.drawImage(KeksIcon, KeksX, KeksY, gridSize, gridSize);
         } else {
             ctx.fillStyle = "brown";
             ctx.fillRect(KeksX, KeksY, gridSize, gridSize);
