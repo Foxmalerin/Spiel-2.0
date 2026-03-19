@@ -97,6 +97,48 @@ let suessesIconGeladen = false;
 suessesIcon.onload = () => {
     suessesIconGeladen = true; };
 
+//Ananas Bild
+const AnanasIcon = new Image();
+AnanasIcon.src = "images/Ananas.png";
+let AnanasIconGeladen = false;
+AnanasIcon.onload = () => {
+    AnanasIconGeladen = true; };
+
+//Birne Bild
+const BirneIcon = new Image();
+BirneIcon.src = "images/Birne.png";
+let BirneIconGeladen = false;
+BirneIcon.onload = () => {
+    BirneIconGeladen = true; };
+
+//GoldenerApfel Bild
+const GoldenerApfelIcon = new Image();
+GoldenerApfelIcon.src = "images/GoldenerApfel.png";
+let GoldenerApfelIconGeladen = false;
+GoldenerApfelIcon.onload = () => {
+    GoldenerApfelIconGeladen = true; };
+
+//Cola Bild
+const ColaIcon = new Image();
+ColaIcon.src = "images/Cola.png";
+let ColaIconGeladen = false;
+ColaIcon.onload = () => {
+    ColaIconGeladen = true; };
+
+//Pancakes Bild
+const PancakesIcon = new Image();
+PancakesIcon.src = "images/Pancakes.png";
+let PancakesIconGeladen = false;
+PancakesIcon.onload = () => {
+    PancakesIconGeladen = true; };
+
+//Pizza Bild
+const PizzaIcon = new Image();
+PizzaIcon.src = "images/Pizza.png";
+let PizzaIconGeladen = false;
+PizzaIcon.onload = () => {
+    PizzaIconGeladen = true; };
+
 //Schlangen Bild
 const snakeHeadImg = new Image();
 snakeHeadImg.src = "images/Schlangen-Kopf.png";   // Passe den Pfad ggf. an!
@@ -113,6 +155,10 @@ const gridSize = 20;      // feste Feldgröße (Pixel)
 const gridCount = 20;    // Anzahl Felder pro Reihe/Spalte
 
 //Variablen festlegen
+let originalSpeed = 200;      // dein Standard-Intervall (ms)
+let speedUpTimer = null;      // Timer für das Zurücksetzen des Tempos
+let goldApfelTimer = null;
+let snakeGrow = 0;
 let lastTapTime = 0;
 let touchStartX = 0, touchStartY = 0;
 let touchEndX = 0, touchEndY = 0;
@@ -134,6 +180,12 @@ let ZitroneX, ZitroneY;
 let DonutX, DonutY;
 let KeksX, KeksY;
 let suessesX, suessesY;
+let AnanasX, AnanasY ;
+let BirneX, BirneY ;
+let GoldenerApfelX, GoldenerApfelY ;
+let ColaX, ColaY ;
+let PancakesX, PancakesY ;
+let PizzaX, PizzaY ;
 
 // Score-Funktion (zeichnet den Score im blauen Kasten)
 function updateScore() {
@@ -229,7 +281,13 @@ function generateApple() {
         { x: ZitroneX, y: ZitroneY },
         { x: DonutX, y: DonutY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     appleX = x;
     appleY = y;
@@ -254,7 +312,13 @@ function generateBanane() {
         { x: ZitroneX, y: ZitroneY },
         { x: DonutX, y: DonutY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     bananaX = x;
     bananaY = y;
@@ -279,7 +343,13 @@ function generateMelone() {
         { x: ZitroneX, y: ZitroneY },
         { x: DonutX, y: DonutY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     meloneX = x;
     meloneY = y;
@@ -304,7 +374,13 @@ function generateKokosnuss() {
         { x: ZitroneX, y: ZitroneY },
         { x: DonutX, y: DonutY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     kokosnussX = x;
     kokosnussY = y;
@@ -329,7 +405,13 @@ function generateBlaubeere() {
         { x: ZitroneX, y: ZitroneY },
         { x: DonutX, y: DonutY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     BlaubeereX = x;
     BlaubeereY = y;
@@ -354,7 +436,13 @@ function generateKirschen() {
         { x: ZitroneX, y: ZitroneY },
         { x: DonutX, y: DonutY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     KirschenX = x;
     KirschenY = y;
@@ -379,7 +467,13 @@ function generateOrange() {
         { x: ZitroneX, y: ZitroneY },
         { x: DonutX, y: DonutY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     OrangeX = x;
     OrangeY = y;
@@ -404,7 +498,13 @@ function generateTrauben() {
         { x: ZitroneX, y: ZitroneY },
         { x: DonutX, y: DonutY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     TraubenX = x;
     TraubenY = y;
@@ -429,7 +529,13 @@ function generateZitrone() {
         { x: TraubenX, y: TraubenY },
         { x: DonutX, y: DonutY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     ZitroneX = x;
     ZitroneY = y;
@@ -453,7 +559,13 @@ function generateDonut() {
         { x: OrangeX, y: OrangeY },
         { x: TraubenX, y: TraubenY },
         { x: KeksX, y: KeksY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     DonutX = x;
     DonutY = y;
@@ -477,7 +589,13 @@ function generateKeks() {
         { x: OrangeX, y: OrangeY },
         { x: TraubenX, y: TraubenY },
         { x: DonutX, y: DonutY },
-        { x: suessesX, y: suessesY }
+        { x: suessesX, y: suessesY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     KeksX = x;
     KeksY = y;
@@ -501,22 +619,204 @@ function generatesuesses() {
         { x: OrangeX, y: OrangeY },
         { x: TraubenX, y: TraubenY },
         { x: DonutX, y: DonutY },
-        { x: KeksX, y: KeksY }
+        { x: KeksX, y: KeksY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
     ]));
     suessesX = x;
     suessesY = y;
+}
+
+// Das Ananas generieren
+function generateAnanas() {
+    let maxxxxxxxxxxxxxX = Math.floor(canvas.width / gridSize);
+    let maxxxxxxxxxxxxxY = Math.floor(canvas.height / gridSize);
+    let x, y;
+    do {
+        x = Math.floor(Math.random() * maxxxxxxxxxxxxxX) * gridSize;
+        y = Math.floor(Math.random() * maxxxxxxxxxxxxxY) * gridSize;
+    } while (!isFree(x, y, [
+        { x: appleX, y: appleY },
+        { x: bananaX, y: bananaY },
+        { x: meloneX, y: meloneY },
+        { x: kokosnussX, y: kokosnussY },
+        { x: BlaubeereX, y: BlaubeereY },
+        { x: KirschenX, y: KirschenY },
+        { x: OrangeX, y: OrangeY },
+        { x: TraubenX, y: TraubenY },
+        { x: DonutX, y: DonutY },
+        { x: KeksX, y: KeksY },
+        { x: BirneX, y: BirneY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
+    ]));
+    AnanasX = x;
+    AnanasY = y;
+}
+
+// Das Birne generieren
+function generateBirne() {
+    let maxxxxxxxxxxxxxxX = Math.floor(canvas.width / gridSize);
+    let maxxxxxxxxxxxxxxY = Math.floor(canvas.height / gridSize);
+    let x, y;
+    do {
+        x = Math.floor(Math.random() * maxxxxxxxxxxxxxxX) * gridSize;
+        y = Math.floor(Math.random() * maxxxxxxxxxxxxxxY) * gridSize;
+    } while (!isFree(x, y, [
+        { x: appleX, y: appleY },
+        { x: bananaX, y: bananaY },
+        { x: meloneX, y: meloneY },
+        { x: kokosnussX, y: kokosnussY },
+        { x: BlaubeereX, y: BlaubeereY },
+        { x: KirschenX, y: KirschenY },
+        { x: OrangeX, y: OrangeY },
+        { x: TraubenX, y: TraubenY },
+        { x: DonutX, y: DonutY },
+        { x: KeksX, y: KeksY },
+        { x: AnanasX, y: AnanasY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
+    ]));
+    BirneX = x;
+    BirneY = y;
+}
+
+// Das GoldenerApfel generieren
+function generateGoldenerApfel() {
+    let maxxxxxxxxxxxxxxxX = Math.floor(canvas.width / gridSize);
+    let maxxxxxxxxxxxxxxxY = Math.floor(canvas.height / gridSize);
+    let x, y;
+    do {
+        x = Math.floor(Math.random() * maxxxxxxxxxxxxxxxX) * gridSize;
+        y = Math.floor(Math.random() * maxxxxxxxxxxxxxxxY) * gridSize;
+    } while (!isFree(x, y, [
+        { x: appleX, y: appleY },
+        { x: bananaX, y: bananaY },
+        { x: meloneX, y: meloneY },
+        { x: kokosnussX, y: kokosnussY },
+        { x: BlaubeereX, y: BlaubeereY },
+        { x: KirschenX, y: KirschenY },
+        { x: OrangeX, y: OrangeY },
+        { x: TraubenX, y: TraubenY },
+        { x: DonutX, y: DonutY },
+        { x: KeksX, y: KeksY },
+        { x: AnanasX, y: AnanasY },
+        { x: BirneX, y: BirneY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
+    ]));
+    GoldenerApfelX = x;
+    GoldenerApfelY = y;
+    // Timer für automatischen Respawn
+    if (goldApfelTimer) {
+        clearTimeout(goldApfelTimer);
+    }
+    goldApfelTimer = setTimeout(generateGoldenerApfel, 4000); // alle 2,5 Sekunden respawnt der Goldene Apfel
+}
+
+// Die Cola generieren
+function generateCola() {
+    let maxxxxxxxxxxxxxxxX = Math.floor(canvas.width / gridSize);
+    let maxxxxxxxxxxxxxxxY = Math.floor(canvas.height / gridSize);
+    let x, y;
+    do {
+        x = Math.floor(Math.random() * maxxxxxxxxxxxxxxxX) * gridSize;
+        y = Math.floor(Math.random() * maxxxxxxxxxxxxxxxY) * gridSize;
+    } while (!isFree(x, y, [
+        { x: appleX, y: appleY },
+        { x: bananaX, y: bananaY },
+        { x: meloneX, y: meloneY },
+        { x: kokosnussX, y: kokosnussY },
+        { x: BlaubeereX, y: BlaubeereY },
+        { x: KirschenX, y: KirschenY },
+        { x: OrangeX, y: OrangeY },
+        { x: TraubenX, y: TraubenY },
+        { x: DonutX, y: DonutY },
+        { x: KeksX, y: KeksY },
+        { x: AnanasX, y: AnanasY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: PancakesX, y: PancakesY },
+        { x: PizzaX, y: PizzaY }
+    ]));
+    ColaX = x;
+    ColaY = y;
+}
+
+// Die Pancakes generieren
+function generatePancakes() {
+    let maxxxxxxxxxxxxxxxxX = Math.floor(canvas.width / gridSize);
+    let maxxxxxxxxxxxxxxxxY = Math.floor(canvas.height / gridSize);
+    let x, y;
+    do {
+        x = Math.floor(Math.random() * maxxxxxxxxxxxxxxxxX) * gridSize;
+        y = Math.floor(Math.random() * maxxxxxxxxxxxxxxxxY) * gridSize;
+    } while (!isFree(x, y, [
+        { x: appleX, y: appleY },
+        { x: bananaX, y: bananaY },
+        { x: meloneX, y: meloneY },
+        { x: kokosnussX, y: kokosnussY },
+        { x: BlaubeereX, y: BlaubeereY },
+        { x: KirschenX, y: KirschenY },
+        { x: OrangeX, y: OrangeY },
+        { x: TraubenX, y: TraubenY },
+        { x: DonutX, y: DonutY },
+        { x: KeksX, y: KeksY },
+        { x: AnanasX, y: AnanasY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PizzaX, y: PizzaY }
+    ]));
+    PancakesX = x;
+    PancakesY = y;
+}
+
+// Die Pizza generieren
+function generatePizza() {
+    let maxxxxxxxxxxxxxxxxxX = Math.floor(canvas.width / gridSize);
+    let maxxxxxxxxxxxxxxxxxY = Math.floor(canvas.height / gridSize);
+    let x, y;
+    do {
+        x = Math.floor(Math.random() * maxxxxxxxxxxxxxxxxxX) * gridSize;
+        y = Math.floor(Math.random() * maxxxxxxxxxxxxxxxxxY) * gridSize;
+    } while (!isFree(x, y, [
+        { x: appleX, y: appleY },
+        { x: bananaX, y: bananaY },
+        { x: meloneX, y: meloneY },
+        { x: kokosnussX, y: kokosnussY },
+        { x: BlaubeereX, y: BlaubeereY },
+        { x: KirschenX, y: KirschenY },
+        { x: OrangeX, y: OrangeY },
+        { x: TraubenX, y: TraubenY },
+        { x: DonutX, y: DonutY },
+        { x: KeksX, y: KeksY },
+        { x: AnanasX, y: AnanasY },
+        { x: GoldenerApfelX, y: GoldenerApfelY },
+        { x: ColaX, y: ColaY },
+        { x: PancakesX, y: PancakesY }
+    ]));
+    PizzaX = x;
+    PizzaY = y;
 }
 
 
 //Die Schlange Generieren
     function moveSnake() {
         // neuen Kopf berechnen
-        let newHead = { x: snake[0].x, y: snake[0].y };
+        let newHead = {x: snake[0].x, y: snake[0].y};
         // Pfeil richtungen
         if (direction === "right") newHead.x += gridSize;
-        if (direction === "left")  newHead.x -= gridSize;
-        if (direction === "up")    newHead.y -= gridSize;
-        if (direction === "down")  newHead.y += gridSize;
+        if (direction === "left") newHead.x -= gridSize;
+        if (direction === "up") newHead.y -= gridSize;
+        if (direction === "down") newHead.y += gridSize;
         snake.unshift(newHead);
         //Schlange soll wachsen
         if (newHead.x === appleX && newHead.y === appleY) { // wenn die schlange den apfel frisst
@@ -525,63 +825,111 @@ function generatesuesses() {
             generateApple(); // Apfel neu generieren, aber nie auf Snake
 
         } else if (newHead.x === bananaX && newHead.y === bananaY) { // wenn die schlange die banane frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateBanane(); // Banane neu generieren, aber nie auf dem apfel
 
         } else if (newHead.x === meloneX && newHead.y === meloneY) { // wenn die schlange die Melone frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateMelone(); // Melone neu generieren
 
         } else if (newHead.x === kokosnussX && newHead.y === kokosnussY) { // wenn die schlange die Kokosnuss frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateKokosnuss(); // Kokosnuss neu generieren
 
         } else if (newHead.x === BlaubeereX && newHead.y === BlaubeereY) { // wenn die schlange die Blaubeere frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateBlaubeere(); // Blaubeere neu generieren
 
         } else if (newHead.x === KirschenX && newHead.y === KirschenY) { // wenn die schlange die Kirschen frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateKirschen(); // Kirschen neu generieren
 
         } else if (newHead.x === OrangeX && newHead.y === OrangeY) { // wenn die schlange die Orange frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateOrange(); // Orange neu generieren
 
         } else if (newHead.x === TraubenX && newHead.y === TraubenY) { // wenn die schlange die Trauben frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateTrauben(); // Trauben neu generieren
 
         } else if (newHead.x === ZitroneX && newHead.y === ZitroneY) { // wenn die schlange die Zitrone frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateZitrone(); // Zitrone neu generieren
 
         } else if (newHead.x === DonutX && newHead.y === DonutY) { // wenn die schlange den Donut frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateDonut(); // Donut neu generieren
 
         } else if (newHead.x === KeksX && newHead.y === KeksY) { // wenn die schlange den Keks frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generateKeks(); // Keks neu generieren
 
         } else if (newHead.x === suessesX && newHead.y === suessesY) { // wenn die schlange das suesse frisst
-            score ++ //score soll eins höher gehen
+            score++ //score soll eins höher gehen
             updateScore();
             generatesuesses(); // suesses neu generieren
 
+        } else if (newHead.x === AnanasX && newHead.y === AnanasY) { // wenn die schlange die Ananas frisst
+            score++ //score soll eins höher gehen
+            updateScore();
+            generateAnanas(); // Ananas neu generieren
+
+        } else if (newHead.x === BirneX && newHead.y === BirneY) { // wenn die schlange die Birne frisst
+            score++ //score soll eins höher gehen
+            updateScore();
+            generateBirne(); // Birne neu generieren
+
+        } else if (newHead.x === GoldenerApfelX && newHead.y === GoldenerApfelY) { // wenn die schlange den GoldenenApfel frisst
+            score = score + 5 //score soll fünf punkte höher gehen
+            snakeGrow += 4; // Schlange soll um 5 wachsen
+            updateScore();
+            generateGoldenerApfel(); // GoldenerApfel neu generieren
+
+        } else if (newHead.x === ColaX && newHead.y === ColaY) { // wenn die schlange die Cola frisst
+            generateCola(); // Cola neu generieren
+            //damit die schlange schneller wird
+            // Snake für 5 Sekunden schneller machen:
+            if (timer) {
+                clearInterval(timer);
+            }
+            timer = setInterval(gameLoop, 100); // Schnell: 100 ms statt 200 ms
+
+            // Falls noch ein alter SpeedUp-Timer läuft, stoppen
+            if (speedUpTimer) {
+                clearTimeout(speedUpTimer);
+            }
+            speedUpTimer = setTimeout(() => {
+                clearInterval(timer);
+                timer = setInterval(gameLoop, originalSpeed); // Zurück auf original
+                speedUpTimer = null;
+            }, 5000); // 5 Sekunden schneller
+
+        } else if (newHead.x === PancakesX && newHead.y === PancakesY) { // wenn die schlange die Pancakes frisst
+            score ++ //score soll eins höher gehen
+            updateScore();
+            generatePancakes(); // Pancakes neu generieren
+
+        } else if (newHead.x === PizzaX && newHead.y === PizzaY) { // wenn die schlange die Pizza frisst
+            score ++ //score soll eins höher gehen
+            updateScore();
+            generatePizza(); // Pizza neu generieren
         } else {
-            // sonst: letztes Teil entfernen (Länge bleibt gleich)
-            snake.pop();
+            if (snakeGrow > 0) {
+                snakeGrow--;
+                // Schlange wächst, deshalb nichts entfernen!
+            } else {
+                snake.pop();
+            }
         }
     }
 
@@ -628,6 +976,11 @@ timer = null;
 
 // Beim neustart vom game das alles wieder reset
 function resetGame() {
+    // TIMER RESET
+    if (speedUpTimer) {
+        clearTimeout(speedUpTimer);
+        speedUpTimer = null;
+    }
     initSnake();
     direction = "right";
     score = 0;
@@ -644,6 +997,12 @@ function resetGame() {
     generateDonut();
     generateKeks();
     generatesuesses();
+    generateAnanas();
+    generateBirne();
+    generateGoldenerApfel();
+    generateCola();
+    generatePancakes();
+    generatePizza();
     gameOver = false;
     if (timer) {
         clearInterval(timer);
@@ -659,6 +1018,11 @@ function resetGame() {
         if (snake.length === gridCount * gridCount) {
             clearInterval(timer);
             gameOver = true;
+            // TIMER RESET
+            if (speedUpTimer) {
+                clearTimeout(speedUpTimer);
+                speedUpTimer = null;
+            }
             scoreCtx.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
 
             let centerX = scoreCanvas.width / 2;
@@ -684,6 +1048,11 @@ function resetGame() {
         ) {
             clearInterval(timer); // Spiel stoppen
             gameOver = true;
+            // TIMER RESET
+            if (speedUpTimer) {
+                clearTimeout(speedUpTimer);
+                speedUpTimer = null;
+            }
             // Optional: Game Over im Score-Canvas anzeigen
             scoreCtx.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
 
@@ -696,7 +1065,7 @@ function resetGame() {
             scoreCtx.font = "24px Arial";
             scoreCtx.fillStyle = "red";
             scoreCtx.font = "15px Arial";
-            scoreCtx.fillText("Game Over!", centerX, centerY - 10);
+            scoreCtx.fillText("Game Over! Du Hast " + (snake.length - 1) + " Punkte ergattert!", centerX, centerY - 10);
             scoreCtx.fillText("Drücke Enter oder tippe zweimal auf den Bildschirm, um neu zu starten!", centerX, centerY + 18);
             return; // Funktion abbrechen, damit nichts mehr gezeichnet wird
 
@@ -707,6 +1076,11 @@ function resetGame() {
             if (head.x === snake[i].x && head.y === snake[i].y) {
                 clearInterval(timer);
                 gameOver = true;
+                // TIMER RESET
+                if (speedUpTimer) {
+                    clearTimeout(speedUpTimer);
+                    speedUpTimer = null;
+                }
                 scoreCtx.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
 
                 let centerX = scoreCanvas.width / 2;
@@ -718,7 +1092,7 @@ function resetGame() {
                 scoreCtx.font = "24px Arial";
                 scoreCtx.fillStyle = "red";
                 scoreCtx.font = "15px Arial";
-                scoreCtx.fillText("Game Over!", centerX, centerY - 10);
+                scoreCtx.fillText("Game Over! Du Hast " + (snake.length - 1) + " Punkte ergattert!", centerX, centerY - 10);
                 scoreCtx.fillText("Drücke Enter oder tippe zweimal auf den Bildschirm, um neu zu starten!", centerX, centerY + 18);
                 return;
             }
@@ -820,6 +1194,54 @@ function resetGame() {
             ctx.fillRect(suessesX, suessesY, gridSize, gridSize);
         }
 
+        //Die Ananas Zeichnen
+        if (AnanasIconGeladen) {
+            ctx.drawImage(AnanasIcon, AnanasX, AnanasY, gridSize, gridSize);
+        } else {
+            ctx.fillStyle = "yellow";
+            ctx.fillRect(AnanasX, AnanasY, gridSize, gridSize);
+        }
+
+        //Die Birne Zeichnen
+        if (BlaubeereIconGeladen) {
+            ctx.drawImage(BirneIcon, BirneX, BirneY, gridSize, gridSize);
+        } else {
+            ctx.fillStyle = "green";
+            ctx.fillRect(BirneX, BirneY, gridSize, gridSize);
+        }
+
+        //Den GoldenerApfel Zeichnen
+        if (GoldenerApfelIconGeladen) {
+            ctx.drawImage(GoldenerApfelIcon, GoldenerApfelX, GoldenerApfelY, gridSize, gridSize);
+        } else {
+            ctx.fillStyle = "yellow";
+            ctx.fillRect(GoldenerApfelX, GoldenerApfelY, gridSize, gridSize);
+        }
+
+        //Die Cola Zeichnen
+        if (ColaIconGeladen) {
+            ctx.drawImage(ColaIcon, ColaX, ColaY, gridSize, gridSize);
+        } else {
+            ctx.fillStyle = "black";
+            ctx.fillRect(ColaX, ColaY, gridSize, gridSize);
+        }
+
+        //Die Pancakes Zeichnen
+        if (PancakesIconGeladen) {
+            ctx.drawImage(PancakesIcon, PancakesX, PancakesY, gridSize, gridSize);
+        } else {
+            ctx.fillStyle = "orange";
+            ctx.fillRect(PancakesX, PancakesY, gridSize, gridSize);
+        }
+
+        //Die Pizza Zeichnen
+        if (PizzaIconGeladen) {
+            ctx.drawImage(PizzaIcon, PizzaX, PizzaY, gridSize, gridSize);
+        } else {
+            ctx.fillStyle = "yellow";
+            ctx.fillRect(PizzaX, PizzaY, gridSize, gridSize);
+        }
+
         for (let i = 0; i < snake.length; i++) {
             if (i === 0 && snakeHeadImgLoaded) {
                 drawRotatedImage(snakeHeadImg, snake[0].x, snake[0].y, gridSize, direction);
@@ -845,5 +1267,11 @@ generateZitrone();
 generateDonut();
 generateKeks();
 generatesuesses();
+generateAnanas();
+generateBirne();
+generateGoldenerApfel();
+generateCola();
+generatePancakes();
+generatePizza();
 updateScore();
 timer = setInterval(gameLoop, 200);
