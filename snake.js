@@ -13,6 +13,51 @@ function resizeCanvas() {
     initSnake();
 }
 
+// Sounds
+const BiteSound = new Audio("Musik/Bite.mp3");
+BiteSound.volume = 1.0;
+const ClappingSound = new Audio("Musik/Clapping.mp3");
+ClappingSound.volume = 1.0;
+const LaughSound = new Audio("Musik/Laugh3.mp3");
+LaughSound.volume = 1.0;
+const MagicSound = new Audio("Musik/MagicSpell.mp3");
+MagicSound.volume = 1.0;
+const SnoringSound = new Audio("Musik/Snoring.mp3");
+SnoringSound.volume = 0.7;
+
+
+//spannende Musik
+const MovieSound = new Audio("Musik/Movie2.mp3");
+MovieSound.volume = 0.7;
+MovieSound.loop = true;
+
+// Hintergrundmusik
+const bgMusic = new Audio("Musik/TrapBeat.mp3");
+bgMusic.volume = 0.3;
+bgMusic.loop = true;
+// Musik beim ersten Tastendruck/Touch starten
+let musikGestartet = false;
+
+document.addEventListener("keydown", () => {
+    if (!musikGestartet) {
+        bgMusic.play().then(() => {
+            musikGestartet = true;
+        }).catch((error) => {
+            console.log("Musik-Fehler:", error);
+        });
+    }
+});
+
+canvas.addEventListener("touchstart", () => {
+    if (!musikGestartet) {
+        bgMusic.play().then(() => {
+            musikGestartet = true;
+        }).catch((error) => {
+            console.log("Musik-Fehler:", error);
+        });
+    }
+});
+
 //Apfel Bild
 const apfelIcon = new Image();
 apfelIcon.src = "images/Apfel.png"; // Passe den Pfad ggf. an!
@@ -155,6 +200,7 @@ const gridSize = 20;      // feste Feldgröße (Pixel)
 const gridCount = 20;    // Anzahl Felder pro Reihe/Spalte
 
 //Variablen festlegen
+let noFruitTimer = null;
 let originalSpeed = 200;      // dein Standard-Intervall (ms)
 let speedUpTimer = null;      // Timer für das Zurücksetzen des Tempos
 let goldApfelTimer = null;
@@ -201,8 +247,13 @@ updateScore();
 //Pfeil richtungen
 document.addEventListener("keydown", function(event) {
     if (gameOver && event.key === "Enter") {
+        LaughSound.pause();
+        LaughSound.currentTime = 0;
+        ClappingSound.pause();
+        ClappingSound.currentTime = 0;
         gameOver = false;
         resetGame();
+
     }
     if (event.key === "ArrowRight" && direction !== "left") {
         direction = "right";
@@ -232,6 +283,10 @@ canvas.addEventListener('touchend', function(event) {
     // Double Tap
     const currentTime = Date.now();
     if (currentTime - lastTapTime < 300 && gameOver) { // Nur wenn gameOver!
+        LaughSound.pause();
+        LaughSound.currentTime = 0;
+        ClappingSound.pause();
+        ClappingSound.currentTime = 0;
         gameOver = false;
         resetGame();
     }
@@ -823,80 +878,127 @@ function generatePizza() {
             score++ //score soll eins höher gehen
             updateScore();
             generateApple(); // Apfel neu generieren, aber nie auf Snake
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === bananaX && newHead.y === bananaY) { // wenn die schlange die banane frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateBanane(); // Banane neu generieren, aber nie auf dem apfel
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === meloneX && newHead.y === meloneY) { // wenn die schlange die Melone frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateMelone(); // Melone neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === kokosnussX && newHead.y === kokosnussY) { // wenn die schlange die Kokosnuss frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateKokosnuss(); // Kokosnuss neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === BlaubeereX && newHead.y === BlaubeereY) { // wenn die schlange die Blaubeere frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateBlaubeere(); // Blaubeere neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === KirschenX && newHead.y === KirschenY) { // wenn die schlange die Kirschen frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateKirschen(); // Kirschen neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === OrangeX && newHead.y === OrangeY) { // wenn die schlange die Orange frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateOrange(); // Orange neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === TraubenX && newHead.y === TraubenY) { // wenn die schlange die Trauben frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateTrauben(); // Trauben neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === ZitroneX && newHead.y === ZitroneY) { // wenn die schlange die Zitrone frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateZitrone(); // Zitrone neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === DonutX && newHead.y === DonutY) { // wenn die schlange den Donut frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateDonut(); // Donut neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === KeksX && newHead.y === KeksY) { // wenn die schlange den Keks frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateKeks(); // Keks neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === suessesX && newHead.y === suessesY) { // wenn die schlange das suesse frisst
             score++ //score soll eins höher gehen
             updateScore();
             generatesuesses(); // suesses neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === AnanasX && newHead.y === AnanasY) { // wenn die schlange die Ananas frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateAnanas(); // Ananas neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === BirneX && newHead.y === BirneY) { // wenn die schlange die Birne frisst
             score++ //score soll eins höher gehen
             updateScore();
             generateBirne(); // Birne neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === GoldenerApfelX && newHead.y === GoldenerApfelY) { // wenn die schlange den GoldenenApfel frisst
             score = score + 5 //score soll fünf punkte höher gehen
             snakeGrow += 4; // Schlange soll um 5 wachsen
             updateScore();
             generateGoldenerApfel(); // GoldenerApfel neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === ColaX && newHead.y === ColaY) { // wenn die schlange die Cola frisst
             generateCola(); // Cola neu generieren
+            playSound(MagicSound)
+            SnoringSound.pause();
             //damit die schlange schneller wird
             // Snake für 5 Sekunden schneller machen:
             if (timer) {
@@ -918,11 +1020,18 @@ function generatePizza() {
             score ++ //score soll eins höher gehen
             updateScore();
             generatePancakes(); // Pancakes neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
 
         } else if (newHead.x === PizzaX && newHead.y === PizzaY) { // wenn die schlange die Pizza frisst
             score ++ //score soll eins höher gehen
             updateScore();
             generatePizza(); // Pizza neu generieren
+            playSound(BiteSound)
+            resetNoFruitTimer();
+            SnoringSound.pause();
+
         } else {
             if (snakeGrow > 0) {
                 snakeGrow--;
@@ -932,6 +1041,25 @@ function generatePizza() {
             }
         }
     }
+function resetNoFruitTimer() {
+    if (noFruitTimer) {
+        clearTimeout(noFruitTimer);
+    }
+    noFruitTimer = setTimeout(noFruitAction, 10000);
+}
+function noFruitAction() {
+    playSound(SnoringSound);
+    resetNoFruitTimer(); // Timer sofort wieder starten!
+}
+
+function playSound(sound) {
+    sound.currentTime = 0
+    sound.play().then(() => {
+        // Erfolgreich abgespielt
+    }).catch((error) => {
+        console.log("Sound-Fehler:", error);
+    });
+}
 
 function drawRotatedImage(image, x, y, size, direction) {
     ctx.save();
@@ -981,6 +1109,7 @@ function resetGame() {
         clearTimeout(speedUpTimer);
         speedUpTimer = null;
     }
+    resetNoFruitTimer();
     initSnake();
     direction = "right";
     score = 0;
@@ -1009,10 +1138,32 @@ function resetGame() {
         timer = null;
     }
     timer = setInterval(gameLoop, 200);
-}
 
+    MovieSound.pause();
+    MovieSound.currentTime = 0;
+    MovieSound.playing = false;
+    // Musik wieder starten
+    bgMusic.currentTime = 0;
+    bgMusic.play().then(() => {
+        musikGestartet = true;
+    }).catch((error) => {
+        console.log("Musik-Fehler:", error);
+    });
+}
     function gameLoop() {
         moveSnake()
+
+        // Endgame-Bereich: z.B. 5 Felder vor dem Gewinn
+        if (snake.length >= gridCount * gridCount - 21 && !MovieSound.playing) {
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+            MovieSound.currentTime = 0;
+            MovieSound.play().then(() => {
+                MovieSound.playing = true;
+            }).catch((error) => {
+                console.log("Spannende-Musik-Fehler:", error);
+            });
+        }
 
         // Gewinn-Fall: Alle Felder sind gefüllt
         if (snake.length === gridCount * gridCount) {
@@ -1034,9 +1185,19 @@ function resetGame() {
             scoreCtx.font = "20px Arial";
             scoreCtx.fillStyle = "blue";
             scoreCtx.fillText("Gewonnen! :)", centerX, centerY - 10);
+            bgMusic.pause();
+            MovieSound.pause();
+            SnoringSound.pause();
+            playSound(ClappingSound);
+            MovieSound.currentTime = 0;
+            MovieSound.playing = false;
 
             scoreCtx.font = "15px Arial";
             scoreCtx.fillText("Drücke Enter oder tippe zweimal auf den Bildschirm, um neu zu starten!", centerX, centerY + 18);
+            if (noFruitTimer) {
+                clearTimeout(noFruitTimer);
+                noFruitTimer = null;
+            }
             return;
         }
 
@@ -1066,7 +1227,18 @@ function resetGame() {
             scoreCtx.fillStyle = "red";
             scoreCtx.font = "15px Arial";
             scoreCtx.fillText("Game Over! Du Hast " + (snake.length - 1) + " Punkte ergattert!", centerX, centerY - 10);
+            bgMusic.pause();
+            MovieSound.pause();
+            SnoringSound.pause();
+            playSound(LaughSound);
+            MovieSound.currentTime = 0;
+            MovieSound.playing = false;
+
             scoreCtx.fillText("Drücke Enter oder tippe zweimal auf den Bildschirm, um neu zu starten!", centerX, centerY + 18);
+            if (noFruitTimer) {
+                clearTimeout(noFruitTimer);
+                noFruitTimer = null;
+            }
             return; // Funktion abbrechen, damit nichts mehr gezeichnet wird
 
         }
@@ -1093,7 +1265,18 @@ function resetGame() {
                 scoreCtx.fillStyle = "red";
                 scoreCtx.font = "15px Arial";
                 scoreCtx.fillText("Game Over! Du Hast " + (snake.length - 1) + " Punkte ergattert!", centerX, centerY - 10);
+                bgMusic.pause();
+                MovieSound.pause();
+                SnoringSound.pause();
+                playSound(LaughSound);
+                MovieSound.currentTime = 0;
+                MovieSound.playing = false;
+
                 scoreCtx.fillText("Drücke Enter oder tippe zweimal auf den Bildschirm, um neu zu starten!", centerX, centerY + 18);
+                if (noFruitTimer) {
+                    clearTimeout(noFruitTimer);
+                    noFruitTimer = null;
+                }
                 return;
             }
         }
@@ -1275,3 +1458,4 @@ generatePancakes();
 generatePizza();
 updateScore();
 timer = setInterval(gameLoop, 200);
+resetNoFruitTimer();
