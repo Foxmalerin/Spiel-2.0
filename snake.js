@@ -1153,7 +1153,7 @@ function resetGame() {
     function gameLoop() {
         moveSnake()
 
-        // Endgame-Bereich: z.B. 5 Felder vor dem Gewinn
+        // Endgame-Bereich: 20 Felder vor dem Gewinn
         if (snake.length >= gridCount * gridCount - 21 && !MovieSound.playing) {
             bgMusic.pause();
             bgMusic.currentTime = 0;
